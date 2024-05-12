@@ -52,6 +52,8 @@ namespace CrawlerProject
                 };
                 car.Features = WebUtility.HtmlDecode(car.Features);
                 car.Engine = WebUtility.HtmlDecode(car.Engine);
+                car.Origin = WebUtility.HtmlDecode(car.Origin);
+                car.Designs = WebUtility.HtmlDecode(car.Designs);
                 cars.Add(car);
             }
             //xuất ra excel
