@@ -8,6 +8,7 @@ using System.Web;
 using System.Net;
 using System.IO;
 using OfficeOpenXml;
+using System.Runtime.ConstrainedExecution;
 
 namespace CrawlerProject
 {
@@ -73,6 +74,45 @@ namespace CrawlerProject
                 FileInfo excelFile = new FileInfo(@"D:\ExportExcelCrawlData\Result.xlsx");
                 excel.SaveAs(excelFile);
             }
+            var imgs = htmlDocument.DocumentNode.Descendants("img").ToList();
+            WebClient client = new WebClient();
+            int i = 0;
+            var urlWeb = @"https://www.toyota.com.vn/";
+            foreach (var item in imgs)
+            {
+                if (item.Attributes["data-src"] == null)
+                {
+                    string urlDownload = WebUtility.HtmlDecode(item.Attributes["src"].Value);
+                    try
+                    {
+                        if(!urlDownload.Contains(urlWeb))
+                            client.DownloadFile(urlWeb + urlDownload, @"D:\ExportExcelCrawlData\" + i + ".jpg");
+                        else
+                            client.DownloadFile(urlDownload, @"D:\ExportExcelCrawlData\" + i + ".jpg");
+                    }
+                    catch
+                    {
+
+                    }
+                }
+                else
+                {
+                    string urlDownload = WebUtility.HtmlDecode(item.Attributes["data-src"].Value);
+                    try
+                    {
+                        if(!urlDownload.Contains(urlWeb))
+                            client.DownloadFile(urlWeb + urlDownload, @"D:\ExportExcelCrawlData\" + i + ".jpg");
+                        else
+                            client.DownloadFile(urlDownload, @"D:\ExportExcelCrawlData\" + i + ".jpg");
+                    }
+                    catch
+                    {
+
+                    }
+                }
+                i++;
+            }
+
             Console.ReadLine();
         }
     }
